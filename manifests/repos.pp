@@ -10,7 +10,7 @@ class docker::repos (
 
   ensure_packages($docker::prerequired_packages)
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       $release = $docker::release
       $package_key = $docker::package_key
@@ -44,7 +44,7 @@ class docker::repos (
         }
         if $docker::manage_package {
           include apt
-          if $::operatingsystem == 'Debian' and $::lsbdistcodename == 'wheezy' {
+          if $facts['os']['name'] == 'Debian' and $facts['os']['distro']['codename'] == 'wheezy' {
             include apt::backports
           }
           Exec['apt_update'] -> Package[$docker::prerequired_packages]
